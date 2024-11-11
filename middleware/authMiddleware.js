@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const { jwtSecret } = require('../config');
 
-module.exports = function (req, res, next) {
+const authenticate = (req, res, next) => {
   if (req.method === 'OPTIONS') {
     return next();
   }
@@ -12,7 +12,7 @@ module.exports = function (req, res, next) {
       return res.status(403).json({ message: 'Пользователь не авторизован' });
     }
 
-    const decodedData = jwt.verify(token, jwtSecret);
+    const decodedData = jwt.verify(token, jwtSecret, { algorithms: ['HS256'] });
     req.user = decodedData;
     next();
   } catch (e) {
@@ -20,3 +20,5 @@ module.exports = function (req, res, next) {
     return res.status(403).json({ message: 'Пользователь не авторизован' });
   }
 };
+
+module.exports = authenticate;

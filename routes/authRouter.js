@@ -9,5 +9,7 @@ router.post('/register', authController.register);
 router.post('/login', authController.login);
 router.get('/protected', authMiddleware, authController.protectedRoute);
 router.get('/admin-only', authMiddleware, roleMiddleware('admin'), authController.protectedRoute);
+router.post('/roles', authMiddleware, roleMiddleware('admin'), authController.createRole);
+router.post('/refresh-token', authController.refreshToken);
 
 module.exports = router;
